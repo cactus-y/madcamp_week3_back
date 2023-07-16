@@ -1,6 +1,8 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
 
+const originalUrl = 'https://www.korea.ac.kr/user/restaurantMenuAllList.do?siteId=university&id=university_050402000000';
+
 // should be valid date: starts from monday, month does not start from 0
 function getUrl(startYear, startMonth, startDay) {
     let endYear = Number(startYear);
@@ -22,7 +24,8 @@ function getUrl(startYear, startMonth, startDay) {
 
 const getHtml = async (year, month, dayOfMonth) => {
     try {
-        const html = await axios.get(getUrl(year, month, dayOfMonth));
+        // const html = await axios.get(getUrl(year, month, dayOfMonth));
+        const html = await axios.get(originalUrl);
         let menuList = [];
         const $ = cheerio.load(html.data);
 
@@ -41,11 +44,11 @@ const getHtml = async (year, month, dayOfMonth) => {
                     
                     if(monthAndDay[1].length < 2)
                         monthAndDay[1] = '0' + monthAndDay[1];
-                    const date = {
-                        date: `${year}.${monthAndDay[0]}.${monthAndDay[1]}`,
-                        day: $(el).find("span.day").text() + "요일"
-                    };
-                    console.log(date);
+                    const date = JSON.stringify({
+                        "date": `${year}.${monthAndDay[0]}.${monthAndDay[1]}`,
+                        "day": $(el).find("span.day").text() + "요일"
+                    });
+                    // console.log(date);
 
                     const menuString = $(el).find("div.menulist > p");
                     var menu = "";
@@ -55,6 +58,38 @@ const getHtml = async (year, month, dayOfMonth) => {
                     var isBreakfast = false;
                     var isLunch = false;
                     var isDinner = false;
+
+                    if(restaurantName === '산학관 식당') {
+                        const tempText = $(el).find('li').text();
+                        if(!tempText.startsWith('토')) {
+                            const lunchIndex = tempText.indexOf('중식');
+                            const dinnerIndex = tempText.indexOf('석식');
+                            if(dinnerIndex != -1) {
+                                const lunchText = tempText.substring(lunchIndex + 2, dinnerIndex);
+                                const lunchList = lunchText.split('[');
+                                lunchList.forEach(function(it) {
+                                    if(it !== ''){
+                                        lunch.push(JSON.stringify({
+                                            "menuName": it.replace(/]/g, ' '),
+                                            "price": '-'
+                                        }));
+                                    }
+                                });
+                                const dinnerText = tempText.substring(dinnerIndex + 2);
+                                const dinnerList = dinnerText.split('[');
+                                dinnerList.forEach(function(it) {
+                                    if(it !== '') {
+                                        dinner.push(JSON.stringify({
+                                            "menuName": it.replace(/]/g, ' '),
+                                            "price": '-'
+                                        }));
+                                    }
+                                });
+                            
+                            }
+                            
+                        }
+                    }
 
                     menuString.each((idx, p) => {
                         if(restaurantName === "수당삼양패컬티하우스 송림") {
@@ -71,14 +106,14 @@ const getHtml = async (year, month, dayOfMonth) => {
                                                 temp[1] = temp[1] + " " + temp[index];
                                             }
                                         }
-                                        lunch.push({
-                                            menuName: temp[0],
-                                            price: temp[1]
-                                        });
-                                        dinner.push({
-                                            menuName: temp[0],
-                                            price: temp[1]
-                                        });
+                                        lunch.push(JSON.stringify({
+                                            "menuName": temp[0],
+                                            "price": temp[1]
+                                        }));
+                                        dinner.push(JSON.stringify({
+                                            "menuName": temp[0],
+                                            "price": temp[1]
+                                        }));
                                     }   
                                 }
                             });
@@ -108,39 +143,138 @@ const getHtml = async (year, month, dayOfMonth) => {
                             });
                             
 
-                            if(isBreakfast == true) {
-                                breakfast.push({
-                                    menuName: tempText[tempText.length - 1],
-                                    price: "-"
-                                });
-                            } else if(isLunch == true) {
-                                lunch.push({
-                                    menuName: tempText[tempText.length - 1],
-                                    price: "-"
-                                });
-                            } else if(isDinner == true) {
-                                dinner.push({
-                                    menuName: tempText[tempText.length - 1],
-                                    price: "-"
-                                });
+                            if(isBreakfast) {
+                                breakfast.push(JSON.stringify({
+                                    "menuName": tempText[tempText.length - 1],
+                                    "price": "-"
+                                }));
+                            } else if(isLunch) {
+                                lunch.push(JSON.stringify({
+                                    "menuName": tempText[tempText.length - 1],
+                                    "price": "-"
+                                }));
+                            } else if(isDinner) {
+                                dinner.push(JSON.stringify({
+                                    "menuName": tempText[tempText.length - 1],
+                                    "price": "-"
+                                }));
                             }
                             
+                        } else if(restaurantName === "안암학사 식당") {
+                            if($(p).find('br').length) {
+                                $(p).find('br').replaceWith('\n');
+                            }
+                            const tempText = $(p).text().split('\n');
+                            var breakfastMenuName = '';
+                            var lunchMenuName = '';
+                            var dinnerMenuName = '';
+
+                            tempText.forEach(function(it) {
+                                if(it.indexOf('조식') != -1) {
+                                    isBreakfast = true;
+                                    isLunch = false;
+                                    isDinner = false;
+                                } else if(it.indexOf('중식') != -1) {
+                                    isBreakfast = false;
+                                    isLunch = true;
+                                    isDinner = false;
+                                } else if(it.indexOf('석식') != -1) {
+                                    isBreakfast = false;
+                                    isLunch = false;
+                                    isDinner = true;
+                                } else if(it.indexOf('[') != -1 || it.indexOf('(') != -1) {
+                                    isBreakfast = false;
+                                    isLunch = false;
+                                    isDinner = false;
+                                }
+
+                                if(it !== '' && !((/[a-zA-Z]/).test(it))) {
+                                    const tempSplit = it.split(':');
+                                    if(isBreakfast) {
+                                        if(breakfastMenuName === '') {
+                                            breakfastMenuName = tempSplit[tempSplit.length - 1];
+                                        } else {
+                                            breakfastMenuName = breakfastMenuName + " " + tempSplit[tempSplit.length - 1];
+                                        }
+                                    } else if(isLunch) {
+                                        if(lunchMenuName === '') {
+                                            lunchMenuName = tempSplit[tempSplit.length - 1];
+                                        } else {
+                                            lunchMenuName = lunchMenuName + " " + tempSplit[tempSplit.length - 1];
+                                        }
+                                    } else if(isDinner) {
+                                        if(dinnerMenuName === '') {
+                                            dinnerMenuName = tempSplit[tempSplit.length - 1];
+                                        } else {
+                                            dinnerMenuName = dinnerMenuName + " " + tempSplit[tempSplit.length - 1];
+                                        }
+                                    }
+                                }
+                            });
+
+                            if(breakfastMenuName !== '')
+                                breakfast.push(JSON.stringify({ "menuName": breakfastMenuName, "price": '-' }));
+                            if(lunchMenuName !== '')
+                                lunch.push(JSON.stringify({ "menuName": lunchMenuName, "price": '-' }));
+                            if(dinnerMenuName !== '')
+                                dinner.push(JSON.stringify({ "menuName": dinnerMenuName, "price": '-' }));
+                        } else if(restaurantName === '산학관 식당') {
+                            // only for saturday
+                            if($(p).find('br').length) {
+                                $(p).find('br').replaceWith('\n');
+                            }
+                            const tempText = $(p).text();
+                            if(tempText.indexOf('조식') != -1) {
+                                isBreakfast = true;
+                                isLunch = false;
+                                isDinner = false;
+                            } else if(tempText.indexOf('중식') != -1) {
+                                isBreakfast = false;
+                                isLunch = true;
+                                isDinner = false;
+                            } else if(tempText.indexOf('석식') != -1) {
+                                isBreakfast = false;
+                                isLunch = false;
+                                isDinner = true;
+                            }
+
+                            if(!isBreakfast && !isLunch && !isDinner && tempText === '메뉴미정') {
+                                lunch.push(JSON.stringify({
+                                    "menuName": '메뉴미정',
+                                    "price": '-'
+                                }));
+                            }
+                        } else {
+                            if($(p).find('br').length) {
+                                $(p).find('br').replaceWith('\n');
+                            }
+                            const tempText = $(p).text();
+                            lunch.push(JSON.stringify({
+                                "menuName": tempText,
+                                "price": '-'
+                            }));
                         }
                     });
 
                     // console.log(menu);
-                    console.log(breakfast);
-                    console.log(lunch);
-                    console.log(dinner);
+                    // console.log(breakfast);
+                    // console.log(lunch);
+                    // console.log(dinner);
 
                     // put menus into json here. if j is 0, breakfast is empty, and menus are for both lunch and dinner
-
-                    
-
+                    menuList.push({
+                        "retaurantName": restaurantName,
+                        "date": date,
+                        "breakfast": breakfast,
+                        "lunch": lunch,
+                        "dinner": dinner
+                    });
                 });
-                console.log(restaurantName);
+                // console.log(restaurantName);
             });
         });
+
+        console.log(menuList);
 
     } catch(error) {
         console.error(error);
