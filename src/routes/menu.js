@@ -19,6 +19,8 @@ const { getHyuMenu } = require('../menu/hyu');
 const { getSkkuSeoulMenu } = require('../menu/skku_seoul');
 const { getKuMenu } = require('../menu/ku');
 const { getSkkuSuwonMenu } = require('../menu/skku_suwon');
+const { getKaistMenu } = require('../menu/kaist');
+const { getPostechMenu } = require('../menu/postech');
 
 const router = express.Router();
 require('dotenv').config();
@@ -29,9 +31,28 @@ router.get('/list', async (req, res) => {
         if(menuList.length === 0) {
             // get current date
             const today = new Date();
-            const currentYear = today.getFullYear();
-            const currentMonth = today.getMonth(); // Jan is 0
+            const currentYear = today.getFullYear().toString();
+            const hyuMonth = today.getMonth();
+            const currentMonth = today.getMonth() + 1;
             const currentDate = today.getDate();
+
+            let hyuMonthParam, curMonthParam, curDateParam;
+
+
+            if(hyuMonth < 10)
+                hyuMonthParam = '0' + hyuMonth;
+            else
+                hyuMonthParam = hyuMonth.toString();
+            
+            if(currentMonth < 10)
+                curMonthParam = '0' + currentMonth;
+            else 
+                curMonthParam = currentMonth.toString();
+
+            if(currentDate < 10)
+                curDateParam = '0' + currentDate;
+            else 
+                curDateParam = currentDate.toString();
 
             // get data by using web crawling
             const targetRestaurant = await findRestaurantById(req.query.restaurantId);
@@ -39,11 +60,22 @@ router.get('/list', async (req, res) => {
                 const targetUniversity = await findUniversityById(targetRestaurant.universityId);
                 if(targetUniversity) {
                     if(targetUniversity.universityName === '한양대학교') {
-                        const menu = getHyuMenu(currentYear, currentMonth, currentDate);
+                        const menu = getHyuMenu(currentYear, hyuMonthParam, curDateParam);
                     } else if(targetUniversity.universityName === '성균관대학교_서울캠퍼스') {
-                        const menu = getSkkuSeoulMenu(currentYear, currentMonth + 1, currentDate);
+                        const menu = getSkkuSeoulMenu(currentYear, curMonthParam, curDateParam);
                     } else if(targetUniversity.universityName === '고려대학교') {
-                        const menu = getKuMenu(currentYear, currentMonth + 1, currentDate);
+                        const menu = getKuMenu(currentYear, curMonthParam, curDateParam);
+                    } else if(targetUniversity.universityName === '성균관대학교_수원캠퍼스') {
+                        const menu = getSkkuSuwonMenu(currentYear, curMonthParam, curDateParam);
+                    } else if(targetUniversity.universityName === '카이스트') {
+                        const menu = getKaistMenu(currentYear, curMonthParam, curDateParam);
+                    } else if(targetUniversity.universityName === '포항공과대학교') {
+                        const menu = getPostechMenu(currentYear, curMonthParam, curDateParam);
+                    } else {
+                        return res.status(404).json({
+                            success: false,
+                            message: '해당 대학이 존재하지 않습니다.'
+                        });
                     }
                 } else {
                     // could not find the university
