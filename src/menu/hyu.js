@@ -9,11 +9,15 @@ function changeDateUrl(year, month, dayOfMonth) {
 }
 
 const getHyuMenu = async (year, month, dayOfMonth) => {
+    const restaurantMenuList = [];
     try {
         for(let idx = 0; idx < url.length; idx++) {
             const html = await axios.get('https://www.hanyang.ac.kr/web/www/re' + url[idx] + changeDateUrl(year, month, dayOfMonth));
-            let dateList = [];
-            let menuList = [];
+            // let dateList = [];
+            // let menuList = [];
+            let breakfastList = [];
+            let lunchList = [];
+            let dinnerList = [];
             const $ = cheerio.load(html.data);
             
             // restaurant info
@@ -27,11 +31,13 @@ const getHyuMenu = async (year, month, dayOfMonth) => {
 
             // date info
             const date = $("div.day-selc");
+            let currentDate;
             date.map((i, element) => {
-                dateList[i] = {
-                    date: $(element).find("strong").text().replace(/\s/g, ""),
-                    day: $(element).find("span").text().replace(/\s/g, "").replace("달력", ''),
-                };
+                // dateList[i] = {
+                //     date: $(element).find("strong").text().replace(/\s/g, ""),
+                //     day: $(element).find("span").text().replace(/\s/g, "").replace("달력", ''),
+                // };
+                currentDate = $(element).find("strong").text().replace(/\s/g, "");
             });
 
             // menu info
@@ -68,33 +74,62 @@ const getHyuMenu = async (year, month, dayOfMonth) => {
                             menuName = filtered[0];
                         }
 
-                        menu.push(JSON.stringify({
+                        // menu.push(JSON.stringify({
+                        //     menuName: menuName,
+                        //     price: price,
+                        // }));
+                        menu.push({
                             menuName: menuName,
-                            price: price,
-                        }));
+                            price: price
+                        });
 
                     // console.log(filtered);
                     // console.log(price);
                     });
                 
                 });
-                menuList[i] = {
-                    category: $(element).find("h4").text().replace(/\s/g, ""),
-                    menu: menu,
+                // menuList[i] = {
+                //     category: $(element).find("h4").text().replace(/\s/g, ""),
+                //     menu: menu,
+                // }
+                const category = $(element).find("h4").text().replace(/\s/g, "");
+                if(category === '조식') {
+                    menu.forEach(function(it) {
+                        breakfastList.push(it);
+                    });
+                } else if(category === '중식') {
+                    menu.forEach(function(it) {
+                        lunchList.push(it);
+                    });
+                } else if(category === '석식') {
+                    menu.forEach(function(it) {
+                        dinnerList.push(it);
+                    });
                 }
             });
 
-            console.log(restaurant);
-            console.log(dateList);
-            console.log(menuList);
-            console.log("\n\n\n");
+            // console.log(restaurant);
+            // console.log(dateList);
+            // console.log(menuList);
+            // console.log("\n\n\n");
+
+            restaurantMenuList.push({
+                restaurantName: restaurant,
+                date: currentDate,
+                breakfast: breakfastList.length === 0 ? '' : JSON.stringify(breakfastList),
+                lunch: lunchList.length === 0 ? '' : JSON.stringify(lunchList),
+                dinner: dinnerList.length === 0 ? '' : JSON.stringify(dinnerList)
+            });
 
         }
+
+        // console.log(restaurantMenuList);
+        return restaurantMenuList;
          
     } catch(error) {
         console.error(error);
     }
 };
 
-// getHtml("2023", "06", "14");
+// getHyuMenu("2023", "06", "14");
 module.exports = { getHyuMenu };

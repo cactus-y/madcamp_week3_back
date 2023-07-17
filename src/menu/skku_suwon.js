@@ -2,16 +2,14 @@ const axios = require('axios');
 const cheerio = require('cheerio');
 const puppeteer = require('puppeteer');
 
-const resIdList = [1, 2, 5, 6, 4];
+const conSpaceList = ["104", "040", "251"]
+const resIdList = [3, 11, 12];
 
-const getSkkuSeoulMenu = async(year, month, dayOfMonth) => {
+const getSkkuSuwonMenu = async(year, month, dayOfMonth) => {
     const restaurantMenuList = [];
     try {
-        for(let idx = 0; idx < 5; idx++) {
-            var url = `https://www.skku.edu/skku/campus/support/welfare_11.do?mode=info&srDt=${year}-${month}-${dayOfMonth}&srCategory=L&conspaceCd=1020103${idx}&srResId=${resIdList[idx]}&srShowTime=D`;
-            if(idx == 0 || 2 || 4) {
-                url += "&srCategory=L";
-            }
+        for(let idx = 0; idx < 3; idx++) {
+            var url = `https://www.skku.edu/skku/campus/support/welfare_11_1.do?mode=info&srDt=${year}-${month}-${dayOfMonth}&srCategory=L&conspaceCd=20201${conSpaceList[idx]}&srResId=${resIdList[idx]}&srShowTime=D&srCategory=L`;
             
             // const html = await axios.get(url);
             const browser = await puppeteer.launch();
@@ -185,7 +183,7 @@ const getSkkuSeoulMenu = async(year, month, dayOfMonth) => {
     }
 };
 
-// getSkkuSeoulMenu("2023", "07", "14");
+// getSkkuSuwonMenu("2023", "07", "17");
 
 // getHtml("2023", "07", "14");
-module.exports = { getSkkuSeoulMenu };
+module.exports = { getSkkuSuwonMenu };

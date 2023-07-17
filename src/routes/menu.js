@@ -18,6 +18,7 @@ const { findUniversityById } = require('../database/university');
 const { getHyuMenu } = require('../menu/hyu');
 const { getSkkuSeoulMenu } = require('../menu/skku_seoul');
 const { getKuMenu } = require('../menu/ku');
+const { getSkkuSuwonMenu } = require('../menu/skku_suwon');
 
 const router = express.Router();
 require('dotenv').config();
