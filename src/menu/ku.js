@@ -23,10 +23,12 @@ function getUrl(startYear, startMonth, startDay) {
 }
 
 const getKuMenu = async (year, month, dayOfMonth) => {
+    const restaurantMenuList = [];
     try {
         // const html = await axios.get(getUrl(year, month, dayOfMonth));
         const html = await axios.get(originalUrl);
         let menuList = [];
+        let currentDate;
         const $ = cheerio.load(html.data);
 
         const allData = $("#contents_body > div.sub_contents > div > ul");
@@ -44,11 +46,12 @@ const getKuMenu = async (year, month, dayOfMonth) => {
                     
                     if(monthAndDay[1].length < 2)
                         monthAndDay[1] = '0' + monthAndDay[1];
-                    const date = JSON.stringify({
-                        "date": `${year}.${monthAndDay[0]}.${monthAndDay[1]}`,
-                        "day": $(el).find("span.day").text() + "요일"
-                    });
+                    // const date = JSON.stringify({
+                    //     "date": `${year}.${monthAndDay[0]}.${monthAndDay[1]}`,
+                    //     "day": $(el).find("span.day").text() + "요일"
+                    // });
                     // console.log(date);
+                    currentDate = `${year}.${monthAndDay[0]}.${monthAndDay[1]}`;
 
                     const menuString = $(el).find("div.menulist > p");
                     var menu = "";
@@ -69,20 +72,28 @@ const getKuMenu = async (year, month, dayOfMonth) => {
                                 const lunchList = lunchText.split('[');
                                 lunchList.forEach(function(it) {
                                     if(it !== ''){
-                                        lunch.push(JSON.stringify({
-                                            "menuName": it.replace(/]/g, ' '),
-                                            "price": '-'
-                                        }));
+                                        // lunch.push(JSON.stringify({
+                                        //     "menuName": it.replace(/]/g, ' '),
+                                        //     "price": '-'
+                                        // }));
+                                        lunch.push({
+                                            menuName: it.replace(/]/g, ' '),
+                                            price: '-'
+                                        });
                                     }
                                 });
                                 const dinnerText = tempText.substring(dinnerIndex + 2);
                                 const dinnerList = dinnerText.split('[');
                                 dinnerList.forEach(function(it) {
                                     if(it !== '') {
-                                        dinner.push(JSON.stringify({
-                                            "menuName": it.replace(/]/g, ' '),
-                                            "price": '-'
-                                        }));
+                                        // dinner.push(JSON.stringify({
+                                        //     "menuName": it.replace(/]/g, ' '),
+                                        //     "price": '-'
+                                        // }));
+                                        dinner.push({
+                                            menuName: it.replace(/]/g, ' '),
+                                            price: '-'
+                                        });
                                     }
                                 });
                             
@@ -106,14 +117,22 @@ const getKuMenu = async (year, month, dayOfMonth) => {
                                                 temp[1] = temp[1] + " " + temp[index];
                                             }
                                         }
-                                        lunch.push(JSON.stringify({
-                                            "menuName": temp[0],
-                                            "price": temp[1]
-                                        }));
-                                        dinner.push(JSON.stringify({
-                                            "menuName": temp[0],
-                                            "price": temp[1]
-                                        }));
+                                        // lunch.push(JSON.stringify({
+                                        //     "menuName": temp[0],
+                                        //     "price": temp[1]
+                                        // }));
+                                        lunch.push({
+                                            menuName: temp[0],
+                                            price: temp[1]
+                                        });
+                                        // dinner.push(JSON.stringify({
+                                        //     "menuName": temp[0],
+                                        //     "price": temp[1]
+                                        // }));
+                                        dinner.push({
+                                            menuName: temp[0],
+                                            price: temp[1]
+                                        });
                                     }   
                                 }
                             });
@@ -144,20 +163,32 @@ const getKuMenu = async (year, month, dayOfMonth) => {
                             
 
                             if(isBreakfast) {
-                                breakfast.push(JSON.stringify({
-                                    "menuName": tempText[tempText.length - 1],
-                                    "price": "-"
-                                }));
+                                // breakfast.push(JSON.stringify({
+                                //     "menuName": tempText[tempText.length - 1],
+                                //     "price": "-"
+                                // }));
+                                breakfast.push({
+                                    menuName: tempText[tempText.length - 1].substring(1),
+                                    price: '-'
+                                });
                             } else if(isLunch) {
-                                lunch.push(JSON.stringify({
-                                    "menuName": tempText[tempText.length - 1],
-                                    "price": "-"
-                                }));
+                                // lunch.push(JSON.stringify({
+                                //     "menuName": tempText[tempText.length - 1],
+                                //     "price": "-"
+                                // }));
+                                lunch.push({
+                                    menuName: tempText[tempText.length - 1].substring(1),
+                                    price: '-'
+                                });
                             } else if(isDinner) {
-                                dinner.push(JSON.stringify({
-                                    "menuName": tempText[tempText.length - 1],
-                                    "price": "-"
-                                }));
+                                // dinner.push(JSON.stringify({
+                                //     "menuName": tempText[tempText.length - 1],
+                                //     "price": "-"
+                                // }));
+                                dinner.push({
+                                    menuName: tempText[tempText.length - 1].substring(1),
+                                    price: '-'
+                                });
                             }
                             
                         } else if(restaurantName === "안암학사 식당") {
@@ -213,11 +244,14 @@ const getKuMenu = async (year, month, dayOfMonth) => {
                             });
 
                             if(breakfastMenuName !== '')
-                                breakfast.push(JSON.stringify({ "menuName": breakfastMenuName, "price": '-' }));
+                                // breakfast.push(JSON.stringify({ "menuName": breakfastMenuName, "price": '-' }));
+                                breakfast.push({ menuName: breakfastMenuName, price: '-' });
                             if(lunchMenuName !== '')
-                                lunch.push(JSON.stringify({ "menuName": lunchMenuName, "price": '-' }));
+                                // lunch.push(JSON.stringify({ "menuName": lunchMenuName, "price": '-' }));
+                                lunch.push({ menuName: lunchMenuName, price: '-' });
                             if(dinnerMenuName !== '')
-                                dinner.push(JSON.stringify({ "menuName": dinnerMenuName, "price": '-' }));
+                                // dinner.push(JSON.stringify({ "menuName": dinnerMenuName, "price": '-' }));
+                                dinner.push({ menuName: dinnerMenuName, price: '-' });
                         } else if(restaurantName === '산학관 식당') {
                             // only for saturday
                             if($(p).find('br').length) {
@@ -239,20 +273,28 @@ const getKuMenu = async (year, month, dayOfMonth) => {
                             }
 
                             if(!isBreakfast && !isLunch && !isDinner && tempText === '메뉴미정') {
-                                lunch.push(JSON.stringify({
-                                    "menuName": '메뉴미정',
-                                    "price": '-'
-                                }));
+                                // lunch.push(JSON.stringify({
+                                //     "menuName": '메뉴미정',
+                                //     "price": '-'
+                                // }));
+                                lunch.push({
+                                    menuName: '메뉴미정',
+                                    price: '-'
+                                });
                             }
                         } else {
                             if($(p).find('br').length) {
                                 $(p).find('br').replaceWith('\n');
                             }
                             const tempText = $(p).text();
-                            lunch.push(JSON.stringify({
-                                "menuName": tempText,
-                                "price": '-'
-                            }));
+                            // lunch.push(JSON.stringify({
+                            //     "menuName": tempText,
+                            //     "price": '-'
+                            // }));
+                            lunch.push({
+                                menuName: tempText,
+                                price: '-'
+                            });
                         }
                     });
 
@@ -262,24 +304,35 @@ const getKuMenu = async (year, month, dayOfMonth) => {
                     // console.log(dinner);
 
                     // put menus into json here. if j is 0, breakfast is empty, and menus are for both lunch and dinner
-                    menuList.push({
-                        "retaurantName": restaurantName,
-                        "date": date,
-                        "breakfast": breakfast,
-                        "lunch": lunch,
-                        "dinner": dinner
+                    // menuList.push({
+                    //     "retaurantName": restaurantName,
+                    //     "date": date,
+                    //     "breakfast": breakfast,
+                    //     "lunch": lunch,
+                    //     "dinner": dinner
+                    // });
+                    restaurantMenuList.push({
+                        restaurantName: restaurantName.replace(/(\s*)/g, ''),
+                        date: currentDate,
+                        breakfast: breakfast.length === 0 ? '' : JSON.stringify(breakfast),
+                        lunch: lunch.length === 0 ? '' : JSON.stringify(lunch),
+                        dinner: dinner.length === 0 ? '' : JSON.stringify(dinner)
                     });
                 });
                 // console.log(restaurantName);
             });
         });
+        
+        // console.log(restaurantMenuList);
+        return restaurantMenuList;
 
-        console.log(menuList);
+        // console.log(menuList);
+        
 
     } catch(error) {
         console.error(error);
     }
 };
 
-// getHtml("2023", "07", "10");
+getKuMenu("2023", "07", "10");
 module.exports = { getKuMenu };
