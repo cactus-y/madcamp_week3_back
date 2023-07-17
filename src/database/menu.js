@@ -5,22 +5,25 @@ const createMenu = async (data) => {
     return menu;
 };
 
-const findMenuWithName = async (menuName) => {
-    const menu = await Menu.findOne({ menuName });
+const findMenuById = async (menuId) => {
+    const menu = await Menu.findById(menuId);
     return menu;
 };
 
-const findMenuWithId = async (menuId) => {
-    const menu = await Menu.findById(menuId);
-    return {
-        menuId: menu.menuId,
-        menuName: menu.menuName,
-        price: menu.price
-    };
+const updateMenu = async (data) => {
+    const menu = await Menu.findByIdAndUpdate({
+        _id: data._id
+    }, data);
+    return menu;
+};
+
+const deleteMenu = async (menuId) => {
+    await Menu.findByIdAndDelete(menuId);
 };
 
 module.exports = {
-    createMenu,
-    findMenuWithName,
-    findMenuWithId
+    createMenu, 
+    findMenuById,
+    updateMenu,
+    deleteMenu
 };
