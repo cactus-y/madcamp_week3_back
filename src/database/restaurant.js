@@ -10,6 +10,16 @@ const findRestaurantById = async (restaurantId) => {
     return restaurant;
 };
 
+const findRestaurantByName = async (restaurantName) => {
+    const restaurant = await Restaurant.findOne({ restaurantName: restaurantName });
+    return restaurant;
+};
+
+const findAllRestaurantByUniversityId = async (universityId) => {
+    const restaurantList = await Restaurant.find({ universityId: universityId });
+    return restaurantList;
+};
+
 const deleteRestaurant = async (restaurantId) => {
     await Restaurant.findByIdAndDelete(restaurantId);
 };
@@ -17,5 +27,7 @@ const deleteRestaurant = async (restaurantId) => {
 module.exports = {
     createRestaurant,
     findRestaurantById,
+    findRestaurantByName,
+    findAllRestaurantByUniversityId,
     deleteRestaurant
 };
