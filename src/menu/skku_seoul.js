@@ -4,7 +4,7 @@ const puppeteer = require('puppeteer');
 
 const resIdList = [1, 2, 5, 6, 4];
 
-const getHtml = async(year, month, dayOfMonth) => {
+const getSkkuSeoulMenu = async(year, month, dayOfMonth) => {
     try {
         for(let idx = 0; idx < 5; idx++) {
             var url = `https://www.skku.edu/skku/campus/support/welfare_11.do?mode=info&srDt=${year}-${month}-${dayOfMonth}&srCategory=L&conspaceCd=1020103${idx}&srResId=${resIdList[idx]}&srShowTime=D`;
@@ -168,4 +168,5 @@ const getHtml = async(year, month, dayOfMonth) => {
     }
 };
 
-getHtml("2023", "07", "14");
+// getHtml("2023", "07", "14");
+module.exports = { getSkkuSeoulMenu };

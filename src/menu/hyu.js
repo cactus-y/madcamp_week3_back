@@ -8,7 +8,7 @@ function changeDateUrl(year, month, dayOfMonth) {
     return `?p_p_id=foodView_WAR_foodportlet&p_p_lifecycle=0&p_p_state=normal&p_p_mode=view&p_p_col_id=column-1&p_p_col_pos=1&p_p_col_count=2&_foodView_WAR_foodportlet_sFoodDateDay=${dayOfMonth}&_foodView_WAR_foodportlet_sFoodDateYear=${year}&_foodView_WAR_foodportlet_action=view&_foodView_WAR_foodportlet_sFoodDateMonth=${month}`;
 }
 
-const getHtml = async (year, month, dayOfMonth) => {
+const getHyuMenu = async (year, month, dayOfMonth) => {
     try {
         for(let idx = 0; idx < url.length; idx++) {
             const html = await axios.get('https://www.hanyang.ac.kr/web/www/re' + url[idx] + changeDateUrl(year, month, dayOfMonth));
@@ -97,4 +97,4 @@ const getHtml = async (year, month, dayOfMonth) => {
 };
 
 // getHtml("2023", "06", "14");
-getHtml(2023, 6, 14);
+module.exports = { getHyuMenu };

@@ -62,10 +62,10 @@ router.post('/', async (req, res) => {
             latitude: req.body.latitude,
             longitude: req.body.longitude
         });
-        return res.status(200).json({
-            status: true,
+        return res.status(201).json({
+            success: true,
             university: {
-                id: newUniversity.id,
+                universityId: newUniversity.id,
                 universityName: newUniversity.universityName,
                 latitude: newUniversity.latitude,
                 longitude: newUniversity.longitude

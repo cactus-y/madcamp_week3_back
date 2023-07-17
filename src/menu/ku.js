@@ -22,7 +22,7 @@ function getUrl(startYear, startMonth, startDay) {
     return `https://www.korea.ac.kr/user/restaurantMenuAllList.do?siteId=university&configIdx=&firstWeekDay=${startYear}-${startMonth}-${startDay}&lastWeekDay=${endYear}-${endMonth}-${endDay}&id=university_050402000000`;
 }
 
-const getHtml = async (year, month, dayOfMonth) => {
+const getKuMenu = async (year, month, dayOfMonth) => {
     try {
         // const html = await axios.get(getUrl(year, month, dayOfMonth));
         const html = await axios.get(originalUrl);
@@ -281,4 +281,5 @@ const getHtml = async (year, month, dayOfMonth) => {
     }
 };
 
-getHtml("2023", "07", "10");
+// getHtml("2023", "07", "10");
+module.exports = { getKuMenu };
