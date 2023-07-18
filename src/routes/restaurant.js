@@ -16,13 +16,7 @@ router.get('/', async (req, res) => {
 
         return res.status(200).json({
             success: true,
-            restaurant: {
-                restaurantId: restaurant.id,
-                universityId: restaurant.universityId,
-                restaurantName: restaurant.restaurantName,
-                latitude: restaurant.latitude,
-                longitude: restaurant.longitude
-            }
+            restaurant: restaurant
         });
     } catch(err) {
         console.log(err);
@@ -72,13 +66,7 @@ router.post('/', async (req, res) => {
 
         return res.status(201).json({
             success: true,
-            restaurant: {
-                restaurantId: newRestaurant.id,
-                universityId: newRestaurant.universityId,
-                restaurantName: newRestaurant.restaurantName,
-                latitude: newRestaurant.latitude,
-                longitude: newRestaurant.longitude
-            }
+            restaurant: newRestaurant
         });
     } catch(err) {
         console.log(err);

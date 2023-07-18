@@ -24,7 +24,7 @@ const { getPostechMenu } = require('../menu/postech');
 const router = express.Router();
 require('dotenv').config();
 
-router.get('/list', async (req, res) => {
+router.get('/', async (req, res) => {
     try {
         let menuList;
         // get current date
