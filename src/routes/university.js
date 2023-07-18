@@ -16,12 +16,7 @@ router.get('/', async (req, res) => {
 
         return res.status(200).json({
             success: true,
-            university: {
-                universityId: university.id,
-                universityName: university.universityName,
-                latitude: university.latitude,
-                longitude: university.longitude
-            }
+            university: university
         });
     } catch(err) {
         console.log(err);
@@ -64,12 +59,7 @@ router.post('/', async (req, res) => {
         });
         return res.status(201).json({
             success: true,
-            university: {
-                universityId: newUniversity.id,
-                universityName: newUniversity.universityName,
-                latitude: newUniversity.latitude,
-                longitude: newUniversity.longitude
-            }
+            university: newUniversity
         });
     } catch(err) {
         console.log(err);
