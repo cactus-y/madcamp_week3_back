@@ -6,7 +6,7 @@ const createUniversity = async (data) => {
 };
 
 const findUniversityByName = async (universityName) => {
-    const university = await University.findOne({ universityName: universityName });
+    const university = await University.findOne({ "universityName": universityName });
     return university;
 };
 
