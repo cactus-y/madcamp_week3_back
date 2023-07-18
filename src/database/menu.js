@@ -5,24 +5,24 @@ const createMenu = async (data) => {
     return menu;
 };
 
-const findMenuByDate = async (date) => {
-    const menu = await Menu.findOne({ date: date });
-    return menu;
-};
+// const findMenuByDate = async (date) => {
+//     const menu = await Menu.findOne({ date: date });
+//     return menu;
+// };
 
 // const findAllMenuByRestaurantId = async (restaurantId) => {
 //     const menuList = await Menu.find({ restaurantId: restaurantId });
 //     return menuList;
 // };
 
-const findAllMenuByDate = async (restaurantId, date) => {
-    const menuList = await Menu.find({ restaurantId: restaurantId, date: date });
+const findMenuByDate = async (restaurantId, date) => {
+    const menuList = await Menu.findOne({ "restaurantId": restaurantId, "date": date });
     return menuList;
 };
 
 const updateMenu = async (data) => {
     const menu = await Menu.findByIdAndUpdate({
-        _id: data._id
+        _id: data.menuId
     }, data);
     return menu;
 };
@@ -34,7 +34,6 @@ const deleteMenu = async (menuId) => {
 module.exports = {
     createMenu, 
     findMenuByDate,
-    findAllMenuByDate,
     updateMenu,
     deleteMenu
 };

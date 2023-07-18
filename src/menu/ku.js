@@ -334,5 +334,5 @@ const getKuMenu = async (year, month, dayOfMonth) => {
     }
 };
 
-getKuMenu("2023", "07", "10");
+// getKuMenu("2023", "07", "10");
 module.exports = { getKuMenu };

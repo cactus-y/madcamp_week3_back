@@ -44,7 +44,7 @@ const restaurant = new Schema({
 });
 
 const menu = new Schema({
-    restaurant: {
+    restaurantId: {
         required: true,
         type: Schema.Types.ObjectId,
         ref: 'Restaurant'

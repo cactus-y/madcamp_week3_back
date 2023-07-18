@@ -10,13 +10,13 @@ const findRestaurantById = async (restaurantId) => {
     return restaurant;
 };
 
-const findRestaurantByName = async (restaurantName) => {
-    const restaurant = await Restaurant.findOne({ restaurantName: restaurantName });
+const findRestaurantByName = async (universityId, restaurantName) => {
+    const restaurant = await Restaurant.findOne({ "universityId": universityId, "restaurantName": restaurantName });
     return restaurant;
 };
 
 const findAllRestaurantByUniversityId = async (universityId) => {
-    const restaurantList = await Restaurant.find({ universityId: universityId });
+    const restaurantList = await Restaurant.find({ "universityId": universityId });
     return restaurantList;
 };
 

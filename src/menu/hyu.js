@@ -31,7 +31,7 @@ const getHyuMenu = async (year, month, dayOfMonth) => {
 
             // date info
             const date = $("div.day-selc");
-            let currentDate;
+            let currentDate = '';
             date.map((i, element) => {
                 // dateList[i] = {
                 //     date: $(element).find("strong").text().replace(/\s/g, ""),
@@ -127,7 +127,8 @@ const getHyuMenu = async (year, month, dayOfMonth) => {
         return restaurantMenuList;
          
     } catch(error) {
-        console.error(error);
+        console.log(error);
+        return [];
     }
 };
 
