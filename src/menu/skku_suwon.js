@@ -12,7 +12,10 @@ const getSkkuSuwonMenu = async(year, month, dayOfMonth) => {
             var url = `https://www.skku.edu/skku/campus/support/welfare_11_1.do?mode=info&srDt=${year}-${month}-${dayOfMonth}&srCategory=L&conspaceCd=20201${conSpaceList[idx]}&srResId=${resIdList[idx]}&srShowTime=D&srCategory=L`;
             
             // const html = await axios.get(url);
-            const browser = await puppeteer.launch();
+            const browser = await puppeteer.launch({
+                headless: true,
+                args: ['--no-sandbox', '--disable-setuid-sandbox'],
+            });
             const page = await browser.newPage();
 
             // page.on('dialog', async dialog => {
