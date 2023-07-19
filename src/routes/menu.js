@@ -40,8 +40,6 @@ router.get('/', async (req, res) => {
         const currentMonth = kr_today.getMonth() + 1;
         const currentDate = kr_today.getDate();
 
-        console.log(kr_today);
-
         let hyuMonthParam, curMonthParam, curDateParam;
 
 
