@@ -314,9 +314,9 @@ const getKuMenu = async (year, month, dayOfMonth) => {
                     restaurantMenuList.push({
                         restaurantName: restaurantName.replace(/(\s*)/g, ''),
                         date: currentDate,
-                        breakfast: breakfast.length === 0 ? '' : JSON.stringify(breakfast),
-                        lunch: lunch.length === 0 ? '' : JSON.stringify(lunch),
-                        dinner: dinner.length === 0 ? '' : JSON.stringify(dinner)
+                        breakfast: breakfast.length === 0 ? '[]' : JSON.stringify(breakfast),
+                        lunch: lunch.length === 0 ? '[]' : JSON.stringify(lunch),
+                        dinner: dinner.length === 0 ? '[]' : JSON.stringify(dinner)
                     });
                 });
                 // console.log(restaurantName);

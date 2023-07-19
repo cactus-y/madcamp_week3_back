@@ -29,10 +29,18 @@ router.get('/', async (req, res) => {
         let menuList;
         // get current date
         const today = new Date();
-        const currentYear = today.getFullYear().toString();
-        const hyuMonth = today.getMonth();
-        const currentMonth = today.getMonth() + 1;
-        const currentDate = today.getDate();
+
+        // change to KST
+        const utc = today.getTime();
+        const KR_TIME_DIFF = 9 * 60 * 60 * 1000;
+        const kr_today = new Date(utc + (KR_TIME_DIFF));
+
+        const currentYear = kr_today.getFullYear().toString();
+        const hyuMonth = kr_today.getMonth();
+        const currentMonth = kr_today.getMonth() + 1;
+        const currentDate = kr_today.getDate();
+
+        console.log(kr_today);
 
         let hyuMonthParam, curMonthParam, curDateParam;
 

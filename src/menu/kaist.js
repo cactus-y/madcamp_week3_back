@@ -450,9 +450,9 @@ const getKaistMenu = async (year, month, dayOfMonth) => {
         restaurantMenuList.push({
             restaurantName: '카이마루',
             date: dateString,
-            breakfast: breakfastList.length === 0 ? '' : JSON.stringify(breakfastList),
-            lunch: lunchList.length === 0 ? '' : JSON.stringify(lunchList),
-            dinner: dinnerList.length === 0 ? '' : JSON.stringify(dinnerList)
+            breakfast: breakfastList.length === 0 ? '[]' : JSON.stringify(breakfastList),
+            lunch: lunchList.length === 0 ? '[]' : JSON.stringify(lunchList),
+            dinner: dinnerList.length === 0 ? '[]' : JSON.stringify(dinnerList)
         });
 
         // 교수회관
@@ -463,9 +463,9 @@ const getKaistMenu = async (year, month, dayOfMonth) => {
         restaurantMenuList.push({
             restaurantName: '교수회관',
             date: dateString,
-            breakfast: breakfastList.length === 0 ? '' : JSON.stringify(breakfastList),
-            lunch: lunchList.length === 0 ? '' : JSON.stringify(lunchList),
-            dinner: dinnerList.length === 0 ? '' : JSON.stringify(dinnerList)
+            breakfast: breakfastList.length === 0 ? '[]' : JSON.stringify(breakfastList),
+            lunch: lunchList.length === 0 ? '[]' : JSON.stringify(lunchList),
+            dinner: dinnerList.length === 0 ? '[]' : JSON.stringify(dinnerList)
         });
 
         // 동맛골_학생식당
@@ -476,9 +476,9 @@ const getKaistMenu = async (year, month, dayOfMonth) => {
         restaurantMenuList.push({
             restaurantName: '동맛골_학생식당',
             date: dateString,
-            breakfast: breakfastList.length === 0 ? '' : JSON.stringify(breakfastList),
-            lunch: lunchList.length === 0 ? '' : JSON.stringify(lunchList),
-            dinner: dinnerList.length === 0 ? '' : JSON.stringify(dinnerList)
+            breakfast: breakfastList.length === 0 ? '[]' : JSON.stringify(breakfastList),
+            lunch: lunchList.length === 0 ? '[]' : JSON.stringify(lunchList),
+            dinner: dinnerList.length === 0 ? '[]' : JSON.stringify(dinnerList)
         });
 
         // 동맛골_교직원식당
@@ -489,9 +489,9 @@ const getKaistMenu = async (year, month, dayOfMonth) => {
         restaurantMenuList.push({
             restaurantName: '동맛골_교직원식당',
             date: dateString,
-            breakfast: breakfastList.length === 0 ? '' : JSON.stringify(breakfastList),
-            lunch: lunchList.length === 0 ? '' : JSON.stringify(lunchList),
-            dinner: dinnerList.length === 0 ? '' : JSON.stringify(dinnerList)
+            breakfast: breakfastList.length === 0 ? '[]' : JSON.stringify(breakfastList),
+            lunch: lunchList.length === 0 ? '[]' : JSON.stringify(lunchList),
+            dinner: dinnerList.length === 0 ? '[]' : JSON.stringify(dinnerList)
         });
 
         // 서맛골
@@ -502,9 +502,9 @@ const getKaistMenu = async (year, month, dayOfMonth) => {
         restaurantMenuList.push({
             restaurantName: '서맛골',
             date: dateString,
-            breakfast: breakfastList.length === 0 ? '' : JSON.stringify(breakfastList),
-            lunch: lunchList.length === 0 ? '' : JSON.stringify(lunchList),
-            dinner: dinnerList.length === 0 ? '' : JSON.stringify(dinnerList)
+            breakfast: breakfastList.length === 0 ? '[]' : JSON.stringify(breakfastList),
+            lunch: lunchList.length === 0 ? '[]' : JSON.stringify(lunchList),
+            dinner: dinnerList.length === 0 ? '[]' : JSON.stringify(dinnerList)
         });
 
         // console.log(restaurantMenuList);

@@ -175,9 +175,9 @@ const getPostechMenu = async (year, month, dayOfMonth) => {
         restaurantMenuList.push({
             restaurantName: '학생식당_해동아우름홀',
             date: dateString,
-            breakfast: breakfastList.length === 0 ? '' : JSON.stringify(breakfastList),
-            lunch: lunchList.length === 0 ? '' : JSON.stringify(lunchList),
-            dinner: dinnerList.length === 0 ? '' : JSON.stringify(dinnerList)
+            breakfast: breakfastList.length === 0 ? '[]' : JSON.stringify(breakfastList),
+            lunch: lunchList.length === 0 ? '[]' : JSON.stringify(lunchList),
+            dinner: dinnerList.length === 0 ? '[]' : JSON.stringify(dinnerList)
         });
 
         // 위즈덤
@@ -186,9 +186,9 @@ const getPostechMenu = async (year, month, dayOfMonth) => {
         restaurantMenuList.push({
             restaurantName: '위즈덤',
             date: dateString,
-            breakfast: '',
-            lunch: lunchList.length === 0 ? '' : JSON.stringify(lunchList),
-            dinner: ''
+            breakfast: '[]',
+            lunch: lunchList.length === 0 ? '[]' : JSON.stringify(lunchList),
+            dinner: '[]'
         });
 
         // 더블루힐
@@ -197,9 +197,9 @@ const getPostechMenu = async (year, month, dayOfMonth) => {
         restaurantMenuList.push({
             restaurantName: '더블루힐',
             date: dateString,
-            breakfast: '',
+            breakfast: '[]',
             lunch: lunchList.length === 0 ? '' : JSON.stringify(lunchList),
-            dinner: ''
+            dinner: '[]'
         });
 
         // console.log(restaurantMenuList);

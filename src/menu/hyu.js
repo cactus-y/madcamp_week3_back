@@ -116,9 +116,9 @@ const getHyuMenu = async (year, month, dayOfMonth) => {
             restaurantMenuList.push({
                 restaurantName: restaurant,
                 date: currentDate,
-                breakfast: breakfastList.length === 0 ? '' : JSON.stringify(breakfastList),
-                lunch: lunchList.length === 0 ? '' : JSON.stringify(lunchList),
-                dinner: dinnerList.length === 0 ? '' : JSON.stringify(dinnerList)
+                breakfast: breakfastList.length === 0 ? '[]' : JSON.stringify(breakfastList),
+                lunch: lunchList.length === 0 ? '[]' : JSON.stringify(lunchList),
+                dinner: dinnerList.length === 0 ? '[]' : JSON.stringify(dinnerList)
             });
 
         }
